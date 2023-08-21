@@ -1,5 +1,5 @@
 #Importando as classes
-from classes import Cliente, Laboratorio, Medicamento, MedicamentoQuimio
+from classes import Cliente, Laboratorio, Medicamento, MedicamentoQuimio, Venda
 
 #Cadastro de clientes
 def cadastrar_cliente():
@@ -106,3 +106,30 @@ def busca_quimioterapico():
             
     else:
         print("Nenhum medicamento encontrado.")
+
+
+def venda_medicamento():
+    info_cliente = str(input("Digite o nome completo ou CPF do cliente: "))
+    if len(Cliente.busca(info_cliente)) == 0:
+        return print("Cliente não encontrado!")
+    else:
+        produtos=[]
+        cliente = Cliente.busca(info_cliente)
+        qtd_medicamentos = input("Digite quantos medicamentos distintos o cliente deseja comprar: ")
+    for i in range(0,len(qtd_medicamentos)):
+        lista_produto=[]
+        info_medicamento = str(input("Digite o nome, composto do medicamento {}: ".format(i)))
+        
+        if len(Medicamento.busca(info_medicamento)) == 0:
+            return print("Medicamento não encontrado!")
+
+        else:
+            medicamento = Medicamento.busca(info_medicamento)
+            qtd_venda = int(input("Digite a quantidade do medicamento: "))
+            preco_unitario = medicamento.valor
+
+        lista_produto=[medicamento,qtd_venda,preco_unitario]
+        produtos.append(lista_produto)
+    
+    venda = Venda(produtos, cliente)
+    venda.finaliza_venda()

@@ -413,10 +413,10 @@ class Medicamento:
     @classmethod
     def busca(cls, busca:str) -> str:
         """
-        Função para buscar o cliente de acordo com um criterio (string)
+        Função para buscar o medicamento de acordo com um criterio (string)
         Parâmetros:
           busca: Recebe um string que será utilizado para realizar a busca.
-        Retorno: Lista de objetos cliente que atendem ao critério apresentado.
+        Retorno: Lista de objetos de medicamentos que atendem ao critério apresentado.
         """
         return [medicamento for medicamento in cls.__medicamentos if busca.upper() in medicamento.__nome.upper() or busca.upper() in medicamento.__composto.upper() or busca.upper() in medicamento.__laboratorio.upper() or busca.upper() in medicamento.__descricao.upper()]
         
@@ -452,3 +452,144 @@ class MedicamentoQuimio(Medicamento):
         Retorno: String contendo nome, o composto, o laboratorio e a descrição do medicamento
         """
         return f' Medicamento:{self.nome} \n Composto:{self.composto} \n Laboratorio:{self.laboratorio} \n Descricao:{self.descricao} \n Necessita receita:{self.__receita} \n Valor:{self.__valor} \n Quantidade:{self.__quantidade}'
+
+
+
+class Venda:
+  """
+  Classe utilizada para criação de objeto Venda. Armazenando seus atributos e métodos.
+  """
+
+  __produtos = None
+  __cliente = None
+  __data_hora = None
+  __total_original = None
+  __desconto = None
+  __vendas = []
+
+  def __init__(self, produtos:list, cliente:Cliente):
+    """
+    Função para construir objeto que registra uma venda.
+    Parâmetros:
+      produtos: Receber uma lista contendo listas com 3 itens (Objeto Medicamento, Qtd Venda, Preço Unitario) cada.
+      cliente: Recebe um OBJETO do tipo Cliente.
+    Retorno: O objeto recém criado.
+    """
+    self.produtos = produtos
+    self.cliente = cliente
+    self.data_hora = datetime.now()
+    self.calculaTotalOriginal()
+    self.calculaDesconto()
+    __class__.__vendas.append(self)
+
+  def __str__(self) -> str:
+    """
+    Função para apresentar através de print o objeto
+    Retorno: String contendo as principais informações da venda.
+    """
+    return f'Venda realizada em {self.data_hora:%d/%m/%Y} para o cliente {self.cliente.nome} no total de R$ {self.total_pagar():.2f}'
+
+  @property
+  def produtos(self) -> list:
+    """
+    Função para recuperar a lista de produtos da venda.
+    Retorno: Lista de produtos comprados.
+    """
+    return self.__produtos
+
+  @produtos.setter
+  def produtos(self, produtos:list):
+    """
+    Função para definir a lista de produtos e quantidade dos medicamentos.
+    Parâmetros:
+      produtos: Recebe a lista de lista contendo objeto medicamento e quantidade.
+    """
+    self.__produtos = produtos
+
+  @property
+  def cliente(self) -> Cliente:
+    """
+    Função para recuperar o objetos CLiente que realiza a compra.
+    Retorno: Objeto do tipo Cliente.
+    """
+    return self.__cliente
+
+  @cliente.setter
+  def cliente(self, cliente:Cliente):
+    """
+    Função para definir o cliente da venda.
+    Parâmetros:
+      cliente: Recebe objeto do tipo Cliente.
+    """
+    self.__cliente = cliente
+
+  @property
+  def data_hora(self) -> str:
+    """
+    Função para recuperar a data e hora que a compra foi realizada.
+    Retorno: Data e hora da Venda.
+    """
+    return self.__data_hora
+
+  @data_hora.setter
+  def data_hora(self, data_hora:str):
+    """
+    Função para definir a hora da venda
+    Parâmetros:
+      cliente: Recebe a hora da venda
+    """
+    self.__data_hora = data_hora
+
+  def calculaTotalOriginal(self) -> float:
+    """
+    Função responsável por percorrer a lista de produtos contendo o medicamento e a quantidade e calcular o valor total sem desconto.
+    Retorno: Retorna o valor total sem desconto da venda.
+    """
+    total_por_produto = [produto[0].valor*produto[1]  for produto in self.__produtos]
+    self.__total_original = sum(total_por_produto)
+    return self.__total_original
+
+  def calculaDesconto(self) -> float:
+    """
+    Função responsável calcular o valor do desconto de acordo com as regras estabelecidas.
+    Retorno: Retorna o % do desconto a ser aplicado.
+    """
+    descontos = [0]
+    if self.__cliente.idade() >= 65:
+      descontos.append(0.2)
+    if self.__total_original >= 150:
+      descontos.append(0.1)
+    self.__desconto = max(descontos)
+    return self.__desconto
+
+  def total_pagar(self) -> float:
+    """
+    Função responsável por retornar o valor da venda contempando já o desconto.
+    Retorno: Retorna o total a ser pago.
+    """
+    return self.__total_original-(self.__total_original*self.__desconto)
+
+  def finaliza_venda(self):
+    """
+    Função responsável por finalizar a venda, registrando as baixa em estoque e registrando na lista de vendas.
+    """
+    for produto in self.__produtos:
+      if produto[0].estoque >= produto[1]:
+        produto[0].baixa_estoque(produto[1])
+      else:
+        print(f'Saldo em estoque do medicamento {produto[0].nome} indisponível. Saldo atual {produto[0].estoque}')
+    else:
+      __class__.__vendas.append(self)
+  
+  @classmethod
+  def busca(cls, busca:str = '') -> list:
+    """
+    Função para buscar a venda de acordo com um criterio (string)
+    Parâmetros:
+      busca: Recebe um string que será utilizado para realizar a busca.
+    Retorno: Lista de objetos vendas que atendem ao critério apresentado.
+    """
+    if busca == '':
+      return cls.__vendas
+    else:
+      return [ venda for venda in cls.__vendas if busca.upper() in venda.cliente.nome.upper() or busca.upper() in venda.data_hora.upper()]

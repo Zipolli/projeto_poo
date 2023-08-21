@@ -1,5 +1,5 @@
-from classes import Cliente, Laboratorio
-from input import cadastrar_cliente, busca_cliente, cadastrar_laboratorio, busca_laboratorio, cadastrar_medicamento, busca_medicamento, cadastrar_quimioterapico, busca_quimioterapico
+from classes import Cliente, Laboratorio, Medicamento
+from input import cadastrar_cliente, busca_cliente, cadastrar_laboratorio, busca_laboratorio, cadastrar_medicamento, busca_medicamento, cadastrar_quimioterapico, busca_quimioterapico, venda_medicamento
 
 def main():
     while True:
@@ -24,7 +24,9 @@ def main():
         print("12. Vendas de medicamentos quimioterápicos")
         print("13. Total de vendas")
         print()
-        print("14. Finalizar")
+        print("Menu de vendas")
+        print("14. Vendas de medicamentos")
+        print("15. Finalizar")
 
         opcao = input("Escolha uma opção: ")
 
@@ -45,6 +47,8 @@ def main():
         elif opcao == "8":
             busca_quimioterapico()
         elif opcao == "14":
+            venda_medicamento()
+        elif opcao == "15":
             print("Saindo do programa.")
             break
         else:
@@ -54,4 +58,5 @@ if __name__ == "__main__":
     cliente01 = Cliente('33736923856', 'Leonardo Zipolli', '25/01/1986')
     cliente02 = Cliente('12345678910', 'Claudio Soares', '26/02/1956')
     cliente03 = Cliente('01234567891', 'Maria da Graça', '06/08/1963')
+    medicamento01 = Medicamento()
     main()
