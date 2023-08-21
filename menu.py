@@ -26,6 +26,7 @@ def main():
         print()
         print("Menu de vendas")
         print("14. Vendas de medicamentos")
+        print()
         print("15. Finalizar")
 
         opcao = input("Escolha uma opção: ")
@@ -58,5 +59,6 @@ if __name__ == "__main__":
     cliente01 = Cliente('33736923856', 'Leonardo Zipolli', '25/01/1986')
     cliente02 = Cliente('12345678910', 'Claudio Soares', '26/02/1956')
     cliente03 = Cliente('01234567891', 'Maria da Graça', '06/08/1963')
-    medicamento01 = Medicamento()
+    medicamento01 = Medicamento('Dramin','Dimenidrinato','Ache','Dramin é indicado para prevenir e tratar os sintomas de enjoo, tontura e vômitos em geral',13.60,20)
+    medicamento02 = Medicamento('Dipirona','Metamizol','Medley','Dramin é indicado para prevenir e tratar os sintomas de enjoo, tontura e vômitos em geral',13.60,20)
     main()

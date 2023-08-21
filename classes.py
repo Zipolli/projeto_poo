@@ -276,7 +276,7 @@ Classe medicamento
 class Medicamento:
     
     __medicamentos = []
-    def __init__(self,nome:str,composto:str,laboratorio:str,descricao:str, valor:float, quantidade:int):
+    def __init__(self,nome:str,composto:str,laboratorio:str,descricao:str, valor:float, estoque:int):
         """
         Função para construir objeto Cliente.
         Parâmetros:
@@ -292,7 +292,7 @@ class Medicamento:
         self.__laboratorio = laboratorio
         self.__descricao = descricao
         self.__valor = valor
-        self.__quantidade = quantidade
+        self.__estoque = estoque
         __class__.__medicamentos.append(self)
         
     @classmethod
@@ -305,7 +305,7 @@ class Medicamento:
         Função para apresentar através de print o objeto
         Retorno: String contendo nome, o composto, o laboratorio e a descrição do medicamento
         """
-        return f' Medicamento:{self.__nome} \n Composto:{self.__composto} \n Laboratorio:{self.__laboratorio} \n Descricao:{self.__descricao} \n Valor:{self.__valor} \n Quantidade:{self.__quantidade}'
+        return f' Medicamento:{self.__nome} \n Composto:{self.__composto} \n Laboratorio:{self.__laboratorio} \n Descricao:{self.__descricao} \n Valor:{self.__valor} \n Quantidade:{self.__estoque}'
 
 
     @property
@@ -394,20 +394,20 @@ class Medicamento:
         
         
     @property
-    def quantidade(self) -> str:
+    def estoque(self) -> str:
         """
-        Função para recuperar a quantidade do medicamento
+        Função para recuperar o estoque do medicamento
         Retorno: Quantidade do medicamento
         """
-        return self.__quantidade
+        return self.__estoque
 
-    @quantidade.setter
-    def quantidade(self, quantidade:str):
+    @estoque.setter
+    def estoque(self, estoque:str):
         """
-        Função para definir a quantidade do medicamento
+        Função para definir o estoque do medicamento
         Retorno: None
         """
-        self.__quantidade = quantidade
+        self.__estoque = estoque
     
     
     @classmethod
@@ -420,7 +420,8 @@ class Medicamento:
         """
         return [medicamento for medicamento in cls.__medicamentos if busca.upper() in medicamento.__nome.upper() or busca.upper() in medicamento.__composto.upper() or busca.upper() in medicamento.__laboratorio.upper() or busca.upper() in medicamento.__descricao.upper()]
         
-        
+    def baixa_estoque(self, retirada):
+       self.__estoque = self.__estoque-retirada
         
 
         

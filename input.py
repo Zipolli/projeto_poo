@@ -114,17 +114,17 @@ def venda_medicamento():
         return print("Cliente não encontrado!")
     else:
         produtos=[]
-        cliente = Cliente.busca(info_cliente)
-        qtd_medicamentos = input("Digite quantos medicamentos distintos o cliente deseja comprar: ")
-    for i in range(0,len(qtd_medicamentos)):
+        cliente = Cliente.busca(info_cliente)[0]
+        qtd_medicamentos = int(input("Digite quantos medicamentos distintos o cliente deseja comprar: "))
+    for i in range(0,qtd_medicamentos):
         lista_produto=[]
-        info_medicamento = str(input("Digite o nome, composto do medicamento {}: ".format(i)))
+        info_medicamento = str(input("Digite o nome ou composto do medicamento {}: ".format(i+1)))
         
         if len(Medicamento.busca(info_medicamento)) == 0:
             return print("Medicamento não encontrado!")
 
         else:
-            medicamento = Medicamento.busca(info_medicamento)
+            medicamento = Medicamento.busca(info_medicamento)[0]
             qtd_venda = int(input("Digite a quantidade do medicamento: "))
             preco_unitario = medicamento.valor
 
@@ -133,3 +133,5 @@ def venda_medicamento():
     
     venda = Venda(produtos, cliente)
     venda.finaliza_venda()
+    print("Venda finalizada com sucesso!!!")
+    print('\n\n ------------------------------------------------------------\n\n')
